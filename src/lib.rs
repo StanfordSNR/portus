@@ -341,6 +341,19 @@ impl CCPHandle {
     }
 }
 
+pub fn ip_to_string(mut ip: u32) -> String
+{
+    let a = ip & 255;
+    ip >>= 8;
+    let b = ip & 255;
+    ip >>= 8;
+    let c = ip & 255;
+    ip >>= 8;
+
+    format!("{}.{}.{}.{}", a.to_string(), b.to_string(),
+        c.to_string(), ip.to_string())
+}
+
 /// Main execution loop of CCP for the static pipeline use case.
 /// The `run` method blocks 'forever'; it only returns in two cases:
 /// 1. The IPC socket is closed.
@@ -468,9 +481,9 @@ where
                            "sid" => c.sid, 
                            "init_cwnd" => c.init_cwnd,
                            "mss"  =>  c.mss,
-                           "src_ip"  =>  c.src_ip,
+                           "src_ip"  =>  ip_to_string(c.src_ip),
                            "src_port"  =>  c.src_port,
-                           "dst_ip"  =>  c.dst_ip,
+                           "dst_ip"  =>  ip_to_string(c.dst_ip),
                            "dst_port"  =>  c.dst_port,
                     );
                 });
